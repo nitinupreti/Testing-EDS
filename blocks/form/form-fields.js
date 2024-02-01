@@ -1,4 +1,4 @@
-import { toClassName } from '../../scripts/aem.js';
+import { toClassName, fetchPlaceholders } from '../../scripts/aem.js';
 
 function createFieldWrapper(fd) {
   const fieldWrapper = document.createElement('div');
@@ -20,9 +20,11 @@ function generateFieldId(fd, suffix = '') {
 }
 
 function createLabel(fd) {
+  const placeholders = await fetchPlaceholders();
   const label = document.createElement('label');
   label.id = generateFieldId(fd, '-label');
-  label.textContent = fd.Label || fd.Name;
+  const labelName = fd.Label || fd.Name;
+  label.textContent = placeholders.labelName || labelName;
   label.setAttribute('for', fd.Id);
   return label;
 }
