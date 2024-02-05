@@ -1,7 +1,6 @@
-async function fetchPlaceholders(prefix = 'default') {
+async function fetchPlaceholders() {
   window.samplejson = window.samplejson || {};
-  if (!window.samplejson[prefix]) {
-    window.samplejson[prefix] = new Promise((resolve) => {
+    window.samplejson = new Promise((resolve) => {
       const url = 'https://dummyjson.com/users';
       fetch(url)
         .then((resp) => {
@@ -11,23 +10,16 @@ async function fetchPlaceholders(prefix = 'default') {
           return {};
         })
         .then((json) => {
-          const placeholders = {};
-          json.data
-            .filter((placeholder) => placeholder.Key)
-            .forEach((placeholder) => {
-              placeholders[toCamelCase(placeholder.Key)] = placeholder.Text;
-            });
-          window.samplejson[prefix] = placeholders;
-          resolve(window.samplejson[prefix]);
+          window.samplejson = json;
+          resolve(window.samplejson);
         })
         .catch(() => {
           // error loading placeholders
-          window.samplejson[prefix] = {};
-          resolve(window.samplejson[prefix]);
+          window.samplejson = {};
+          resolve(window.samplejson);
         });
     });
-  }
-  return window.samplejson[`${prefix}`];
+  return window.samplejson;
 }
 
 export default async function decorate(block) {
