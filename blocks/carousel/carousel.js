@@ -89,6 +89,19 @@ function createSlide(row, slideIndex, carouselId) {
   return slide;
 }
 
+function loadScript(url) {
+  const head = document.querySelector('head');
+  let script = head.querySelector(`script[src="${url}"]`);
+  if (!script) {
+    script = document.createElement('script');
+    script.src = url;
+    script.async = true;
+    head.append(script);
+    return script;
+  }
+  return script;
+}
+
 let carouselId = 0;
 export default async function decorate(block) {
   carouselId += 1;
@@ -147,4 +160,16 @@ export default async function decorate(block) {
   if (!isSingleSlide) {
     bindEvents(block);
   }
+  const button = block.querySelector('a[title="pinterest"]');
+  if (button) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadScript(`https://cdn.cookielaw.org/scripttemplates/otSDKStub.js`);
+            obs.disconnect();
+          }
+        });
+      });
+      obs.observe(button);
+    }
 }

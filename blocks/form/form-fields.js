@@ -19,12 +19,15 @@ function generateFieldId(fd, suffix = '') {
   return `${slug}${idSuffix}`;
 }
 
+function readPlaceHolder(param) {
+  return window.placeholders.default[param] || param;
+}
+
 function createLabel(fd) {
-  const placeholders = await fetchPlaceholders();
   const label = document.createElement('label');
   label.id = generateFieldId(fd, '-label');
   const labelName = fd.Label || fd.Name;
-  label.textContent = placeholders.labelName || labelName;
+  label.textContent = readPlaceHolder(labelName);
   label.setAttribute('for', fd.Id);
   return label;
 }
@@ -197,6 +200,8 @@ const createCheckbox = (fd) => {
   if (!field.value) field.value = 'checked';
   fieldWrapper.classList.add('selection-wrapper');
 
+
+
   return { field, fieldWrapper };
 };
 
@@ -224,6 +229,9 @@ const FIELD_CREATOR_FUNCTIONS = {
 export default async function createField(fd, form) {
   fd.Id = fd.Id || generateFieldId(fd);
   const type = fd.Type.toLowerCase();
+  const url = window.location.href;
+  //if (url.includes('en/us')) await fetchPlaceholders('en');
+  else await fetchPlaceholders('es');
   const createFieldFunc = FIELD_CREATOR_FUNCTIONS[type] || createInput;
   const fieldElements = await createFieldFunc(fd, form);
 
