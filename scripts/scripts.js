@@ -148,7 +148,7 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
-  window.hlx.plugins.run('loadLazy','',pluginContext);
+  window.hlx.plugins.run('loadLazy',pluginContext);
 
   sampleRUM('lazy');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
