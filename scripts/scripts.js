@@ -14,6 +14,16 @@ import {
   getMetadata,
 } from './aem.js';
 
+const pluginContext = {
+  getAllMetadata,
+  getMetadata,
+  loadCSS,
+  loadScript,
+  sampleRUM,
+  toCamelCase,
+  toClassName,
+};
+
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 const AUDIENCES = {
   mobile: () => window.innerWidth < 600,
@@ -96,7 +106,7 @@ async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
 
-  await window.hlx.plugins.run('loadEager');
+  await window.hlx.plugins.run('loadEager', pluginContext);
 
   const main = doc.querySelector('main');
   if (main) {
